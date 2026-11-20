@@ -27,7 +27,7 @@ cd "$root"
 # idf.py has no -j; it shells out to cmake --build, which reads this.
 export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-2}"
 
-targets=("${@:-esp32 esp32c3 esp32s3}")
+targets=("${@:-esp32 esp32c3 esp32s3 esp32c6}")
 read -r -a targets <<< "${targets[*]}"
 rc=0
 

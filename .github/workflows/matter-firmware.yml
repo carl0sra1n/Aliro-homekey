@@ -19,7 +19,7 @@ on:
       target:
         description: Chip to build for
         type: choice
-        options: [esp32, esp32c3, esp32s3]
+        options: [esp32, esp32c3, esp32s3, esp32c6]
         default: esp32
 
 jobs:
@@ -44,8 +44,12 @@ jobs:
           # ESP_MATTER_PATH is what the top-level CMakeLists keys off to add
           # esp-matter's components; sdkconfig.matter is what turns the door
           # lock endpoint on.
-          idf.py -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.matter" \
-                 set-target ${{ inputs.target }} build
+          if [ -f "boards/sdkconfig.defaults.${{ inputs.target }}" ]; then
+            DEFAULTS="sdkconfig.defaults;sdkconfig.matter;boards/sdkconfig.defaults.${{ inputs.target }}"
+          else
+            DEFAULTS="sdkconfig.defaults;sdkconfig.matter"
+          fi
+          idf.py -D SDKCONFIG_DEFAULTS="$DEFAULTS" set-target ${{ inputs.target }} build
 
           # A previous attempt used a nonexistent Kconfig symbol. ESP-IDF only
           # warned and produced firmware without subscription persistence, so

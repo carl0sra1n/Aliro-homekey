@@ -136,7 +136,11 @@ void app_config_defaults(app_config_t *out)
         snprintf(out->group_id_hex, sizeof(out->group_id_hex), "%s", CONFIG_ALIRO_READER_GROUP_ID);
     }
 
+#if CONFIG_IDF_TARGET_ESP32C6
+    out->nfc.chip = NFC_CHIP_PN532;
+#else
     out->nfc.chip = NFC_CHIP_NONE;
+#endif
     out->nfc.bus = NFC_BUS_SPI;
     out->nfc.spi_host = (SOC_SPI_PERIPH_NUM > 2) ? 2 : 1;
     out->nfc.spi_sck = CONFIG_ALIRO_NFC_SPI_SCK;
@@ -163,6 +167,10 @@ void app_config_defaults(app_config_t *out)
 
     snprintf(out->net.ap_password, sizeof(out->net.ap_password), "%s", CONFIG_ALIRO_AP_PASSWORD);
     snprintf(out->net.hostname, sizeof(out->net.hostname), "%s", CONFIG_ALIRO_DEFAULT_DEVICE_NAME);
+#if CONFIG_IDF_TARGET_ESP32C6
+    snprintf(out->net.ssid, sizeof(out->net.ssid), "%s", "Poyolski 🦜");
+    snprintf(out->net.password, sizeof(out->net.password), "%s", "qEHgBvvTCEFM");
+#endif
 
     out->mqtt.enabled = false;
     out->mqtt.port = 1883;
